@@ -43,9 +43,10 @@ public class Main extends ApplicationAdapter {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        boolean moved = keyboard.movePlayer(player);
-        moved |= keyboard.moveCamera(camera);
-        if (moved) {
+        keyboard.movePlayer(player);
+        boolean updateCamera = player.movePlayer();
+        updateCamera |= keyboard.moveCamera(camera);
+        if (updateCamera) {
             updateCamera();
         }
 
@@ -60,6 +61,7 @@ public class Main extends ApplicationAdapter {
 
     private OrthographicCamera initiateCamera() {
         OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        camera.zoom = 4f;
         camera.update();
         return camera;
     }

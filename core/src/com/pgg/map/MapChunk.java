@@ -3,6 +3,7 @@ package com.pgg.map;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.pgg.generation.TileGenerator;
 
@@ -11,7 +12,7 @@ public class MapChunk {
     public static final int COORDINATES_CENTER_CHUNK_Y = 0;
     public static final int CHUNK_SIZE = 32;
 
-    private final Tile[][] chunk = new Tile[CHUNK_SIZE][CHUNK_SIZE];
+    private final TextureRegion[][] chunk = new TextureRegion[CHUNK_SIZE][CHUNK_SIZE];
     private final int xOffset;
     private final int yOffset;
     public final int chunkX;
@@ -49,7 +50,7 @@ public class MapChunk {
                 int drawX = xOffset + x * Tile.TILE_SIZE;
                 int drawY = yOffset + y * Tile.TILE_SIZE;
                 if (inCameraFrustum(viewBounds, drawX, drawY)) {
-                    batch.draw(chunk[y][x].getTile(), drawX, drawY);
+                    batch.draw(chunk[y][x], drawX, drawY);
                 }
             }
         }

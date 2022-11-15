@@ -17,25 +17,19 @@ public class Keyboard {
         return false;
     }
 
-    public boolean movePlayer(Player player) {
-        boolean moved = false;
+    public void movePlayer(Player player) {
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.moveLeft();
-            moved = true;
+            player.accelerateLeft();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.moveRight();
-            moved = true;
+            player.accelerateRight();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            player.moveDown();
-            moved = true;
+            player.accelerateDown();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)  || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.moveUp();
-            moved = true;
+            player.accelerateUp();
         }
-        return moved;
     }
 
     private float stepZoom(float zoom) {
