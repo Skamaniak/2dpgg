@@ -1,0 +1,8 @@
+
+https://www.gamedevelopment.blog/full-libgdx-game-tutorial-infinite-level-generation-with-simplex-noise/
+
+Procedurally generated TiledMap https://gamedev.stackexchange.com/questions/67992/how-would-i-implement-procedurally-generated-tiles-in-libgdx
+
+programatically Generated tilemap: https://www.reddit.com/r/gamedev/comments/9dnmaf/how_to_go_about_making_a_tiled_map_in_libgdx/
+
+Box 2d and infinite generation tutorial https://www.gamedevelopment.blog/full-libgdx-game-tutorial-project-setup/
