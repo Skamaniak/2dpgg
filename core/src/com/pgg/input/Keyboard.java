@@ -7,6 +7,10 @@ import com.pgg.player.Player;
 
 public class Keyboard {
 
+    public static final float ZOOM_MIN = 0.5f;
+    public static final float ZOOM_MAX = 20f;
+    public static final float ZOOM_STEP = 0.1f;
+
     public boolean moveCamera(OrthographicCamera camera) {
         float zoom = stepZoom(camera.zoom);
 
@@ -17,7 +21,7 @@ public class Keyboard {
         return false;
     }
 
-    public void movePlayer(Player player) {
+    public void readInputs(Player player) {
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             player.accelerateLeft();
         }
@@ -33,12 +37,15 @@ public class Keyboard {
     }
 
     private float stepZoom(float zoom) {
+        float nextZoom;
         if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-            return zoom >= 20f ? 20f : zoom + 0.1f;
+            nextZoom = zoom + ZOOM_STEP;
+            return nextZoom >= ZOOM_MAX ? ZOOM_MAX : nextZoom;
 
         }
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            return zoom <= 0.5f ? 0.5f : zoom - 0.1f;
+            nextZoom = zoom - ZOOM_STEP;
+            return nextZoom <= ZOOM_MIN ? ZOOM_MIN : nextZoom;
         }
         return zoom;
     }

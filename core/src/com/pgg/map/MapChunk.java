@@ -3,16 +3,19 @@ package com.pgg.map;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.pgg.generation.TileGenerator;
+import com.pgg.map.tile.LandscapeTile;
+import com.pgg.map.tile.TerrainFeatureTile;
+import com.pgg.map.tile.Tile;
 
 public class MapChunk {
     public static final int COORDINATES_CENTER_CHUNK_X = 0;
     public static final int COORDINATES_CENTER_CHUNK_Y = 0;
     public static final int CHUNK_SIZE = 32;
 
-    private final TextureRegion[][] chunk = new TextureRegion[CHUNK_SIZE][CHUNK_SIZE];
+    private final LandscapeTile[][] landscape = new LandscapeTile[CHUNK_SIZE][CHUNK_SIZE];
+    private final TerrainFeatureTile[][] terrainFeatures = new TerrainFeatureTile[CHUNK_SIZE][CHUNK_SIZE];
     private final int xOffset;
     private final int yOffset;
     public final int chunkX;
@@ -31,7 +34,9 @@ public class MapChunk {
     private void generate(TileGenerator generator) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int y = 0; y < CHUNK_SIZE; y++) {
-                chunk[y][x] = generator.generateTile(x + chunkX * CHUNK_SIZE, y + chunkY * CHUNK_SIZE);
+                TileGenerator.GenerationResult result = generator.generateRegion(x + chunkX * CHUNK_SIZE, y + chunkY * CHUNK_SIZE);
+                landscape[y][x] = result.landscapeTile;
+                terrainFeatures[y][x] = result.terrainFeatureTile;
             }
         }
     }
@@ -43,18 +48,33 @@ public class MapChunk {
                 || tileY > viewBounds.y + viewBounds.height);
     }
 
-
     public void render(Batch batch, Rectangle viewBounds) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int y = 0; y < CHUNK_SIZE; y++) {
                 int drawX = xOffset + x * Tile.TILE_SIZE;
                 int drawY = yOffset + y * Tile.TILE_SIZE;
                 if (inCameraFrustum(viewBounds, drawX, drawY)) {
-                    batch.draw(chunk[y][x], drawX, drawY);
+                    batch.draw(landscape[y][x].getTexture(), drawX, drawY);
+                    if (terrainFeatures[y][x] != null) {
+                        batch.draw(terrainFeatures[y][x].getTexture(), drawX, drawY);
+                    }
                 }
             }
         }
         drawDebug(batch);
+    }
+
+    public LandscapeTile getLandscapeAt(int x, int y) {
+        int sanitisedX = ((x - xOffset) / Tile.TILE_SIZE);
+        int sanitisedY = ((y - yOffset) / Tile.TILE_SIZE);
+        return landscape[sanitisedY][sanitisedX];
+    }
+
+    public TerrainFeatureTile getTerrainFeatureAt(int x, int y) {
+        int sanitisedX = ((x - xOffset) / Tile.TILE_SIZE);
+        int sanitisedY = ((y - yOffset) / Tile.TILE_SIZE);
+        return terrainFeatures[sanitisedY][sanitisedX];
+
     }
 
     // FIXME debug

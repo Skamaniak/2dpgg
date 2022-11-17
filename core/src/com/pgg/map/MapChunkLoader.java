@@ -1,6 +1,7 @@
 package com.pgg.map;
 
 import com.pgg.generation.TileGenerator;
+import com.pgg.map.tile.Tile;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,14 +20,21 @@ public class MapChunkLoader {
         this.loadDistance = loadDistance;
     }
 
-    public Collection<MapChunk> getChunks(float playerX, float playerY) {
-        int chunkX = getChunkCoordinate(playerX);
-        int chunkY = getChunkCoordinate(playerY);
+    public Collection<MapChunk> getChunks(int x, int y) {
+        int chunkX = getChunkCoordinate(x);
+        int chunkY = getChunkCoordinate(y);
 
         unloadUnnecessaryChunks(chunkX, chunkY);
         ensureSurroundingChunksLoaded(chunkX, chunkY);
 
         return loadedChunks.values();
+    }
+
+    public MapChunk getChunkAt(int x, int y) {
+        int chunkX = getChunkCoordinate(x);
+        int chunkY = getChunkCoordinate(y);
+
+        return loadedChunks.get(chunkId(chunkX, chunkY));
     }
 
     private void ensureSurroundingChunksLoaded(int chunkX, int chunkY) {
