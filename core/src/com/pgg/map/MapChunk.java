@@ -9,6 +9,8 @@ import com.pgg.map.tile.LandscapeTile;
 import com.pgg.map.tile.TerrainFeatureTile;
 import com.pgg.map.tile.Tile;
 
+import java.util.Arrays;
+
 public class MapChunk {
     public static final int COORDINATES_CENTER_CHUNK_X = 0;
     public static final int COORDINATES_CENTER_CHUNK_Y = 0;
@@ -85,4 +87,16 @@ public class MapChunk {
         Debug.DEBUG_FONT.draw(batch, "[" + chunkX + ", " + chunkY + "]", xOffset + 10, yOffset + 20);
     }
 
+    @Override
+    public String toString() {
+        return "MapChunk{" +
+                "chunkX=" + chunkX +
+                ", chunkY=" + chunkY +
+                ", xOffset=" + xOffset +
+                ", yOffset=" + yOffset +
+                ", landscapeSize=" + landscape.length +
+                ", terrainFeaturesSize=" + terrainFeatures.length +
+                ", tainted=" + tainted +
+                '}';
+    }
 }

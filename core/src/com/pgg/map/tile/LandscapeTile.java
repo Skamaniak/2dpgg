@@ -26,6 +26,9 @@ public class LandscapeTile implements Tile {
 
     @Override
     public String toString() {
-        return "elevation=" + elevation + ", biome=" + biome;
+        return "LandscapeTile{" +
+                "biome=" + biome +
+                ", elevation=" + elevation +
+                '}';
     }
 }

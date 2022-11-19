@@ -75,4 +75,13 @@ public class MapChunkLoader {
     private int getChunkCoordinate(float playerCoordinate) {
         return (int) Math.floor(playerCoordinate / (MapChunk.CHUNK_SIZE * Tile.TILE_SIZE));
     }
+
+    @Override
+    public String toString() {
+        return "MapChunkLoader{" +
+                "loadSurroundings=" + loadSurroundings +
+                ", loadDistance=" + loadDistance +
+                ", loadedChunks=" + loadedChunks.size() +
+                '}';
+    }
 }

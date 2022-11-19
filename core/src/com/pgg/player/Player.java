@@ -1,19 +1,21 @@
 package com.pgg.player;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.pgg.Debug;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.pgg.input.Controls;
 import com.pgg.input.Keyboard;
 
 public class Player {
-    private static final int MAX_SPEED = 10;
-    private static final int SPEED_INCREMENT = 2;
-    private static final int SPEED_DECREMENT = 1;
-    private final Texture playerTexture;
-    private final Sprite playerSprite;
-
+    private static final int MAX_SPEED = 256;
+    private static final int SPEED_INCREMENT = 32;
+    private static final int SPEED_DECREMENT = 16;
+    private static final int[] ANIMATION_FRAMES = new int[] {0, 1, 2, 1};
+    private static final int PX_PER_ANIM_FRAME = 32;
+    private final TextureRegion[][] playerTextures;
+    private TextureRegion currentPlayerTexture;
     public float x;
     public float y;
 
@@ -23,19 +25,18 @@ public class Player {
     private int speedX = 0;
     private int speedY = 0;
 
+    private float animFrameAccumulator = 0;
+
     private boolean dampenX = true;
     private boolean dampenY = true;
 
     public Player() {
-        playerTexture = new Texture("player.png"); //TODO use AssetManager?
-        playerSprite = new Sprite(playerTexture);
+        playerTextures = new TextureRegion(new Texture("player.png")).split(32, 32); //TODO use AssetManager?
+        currentPlayerTexture = playerTextures[0][0];
     }
 
     public void render(Batch batch) {
-        playerSprite.setCenter(0, 0);
-        playerSprite.setX(x - 16);
-        playerSprite.setY(y - 16);
-        playerSprite.draw(batch);
+        batch.draw(currentPlayerTexture, x - 16, y);
     }
 
     private void accelerateLeft() {
@@ -74,14 +75,16 @@ public class Player {
     }
 
     public void movePlayer(float speedModifier) {
-        x += speedX * speedModifier; //TODO shall the Gdx.graphics.getDeltaTime() should be factored in?
+        float totalSpeedX = speedX * speedModifier * Gdx.graphics.getDeltaTime();
+        float totalSpeedY = speedY * speedModifier * Gdx.graphics.getDeltaTime();
+        x += totalSpeedX;
+        y += totalSpeedY;
         roundX = (int) x;
-        y += speedY * speedModifier; //TODO shall the Gdx.graphics.getDeltaTime() should be factored in?
         roundY = (int) y;
 
         boolean moved = speedX != 0 || speedY != 0;
         if (moved) {
-            playerSprite.setRotation(360f - (float)(Math.atan2(speedX, speedY) * 180 / Math.PI));
+            animateMovement(totalSpeedX, totalSpeedY);
         }
 
         if (speedX != 0 && dampenX) {
@@ -95,7 +98,36 @@ public class Player {
         dampenY = true;
     }
 
-    public void dispose() {
-        playerTexture.dispose();
+    private void animateMovement(float totalSpeedX, float totalSpeedY) {
+        double angle = (Math.atan2(totalSpeedX, totalSpeedY) + Math.PI) / Math.PI * 2;
+        int direction;
+        if (angle > 1.5 && angle < 2.5) {
+            direction = 3; //up
+        } else if (angle >= 2.5 && angle <= 3.5) {
+            direction = 2; //right
+        } else if (angle >= 0.5 && angle <= 1.5) {
+            direction = 1; //left
+        } else {
+            direction = 0; //down
+        }
+
+        animFrameAccumulator += Math.abs(totalSpeedX) + Math.abs(totalSpeedY);
+        int frame = (int)(animFrameAccumulator / PX_PER_ANIM_FRAME) % ANIMATION_FRAMES.length;
+        currentPlayerTexture = playerTextures[direction][ANIMATION_FRAMES[frame]];
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "x=" + x +
+                ", y=" + y +
+                ", roundX=" + roundX +
+                ", roundY=" + roundY +
+                ", speedX=" + speedX +
+                ", speedY=" + speedY +
+                ", animFrameAccumulator=" + animFrameAccumulator +
+                ", dampenX=" + dampenX +
+                ", dampenY=" + dampenY +
+                '}';
     }
 }

@@ -22,4 +22,10 @@ public class TerrainFeatureTile implements Tile {
         return speedModifier;
     }
 
+    @Override
+    public String toString() {
+        return "TerrainFeatureTile{" +
+                "speedModifier=" + speedModifier +
+                '}';
+    }
 }

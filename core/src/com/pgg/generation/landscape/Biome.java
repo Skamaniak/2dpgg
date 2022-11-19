@@ -20,4 +20,13 @@ public enum Biome {
         this.color = color;
         this.speedModifier = speedModifier;
     }
+
+    @Override
+    public String toString() {
+        return "Biome{" +
+                "name=" + this.name() +
+                ", color=" + color +
+                ", speedModifier=" + speedModifier +
+                '}';
+    }
 }

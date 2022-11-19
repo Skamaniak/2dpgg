@@ -74,20 +74,21 @@ public class Main extends ApplicationAdapter {
         keyboard.registerKeyJustPressAction(Controls.DEBUG_PRINT_INFO, () -> {
             if (Debug.DEBUG_ENABLED) {
                 System.out.println();
-                System.out.println("Player coordinates: " + player.x + ", " + player.y);
+                System.out.println("Player: " + player);
+                System.out.println("Chunk loader: " + mapChunkLoader);
+
                 MapChunk currentChunk = mapChunkLoader.getChunkAt(player.roundX, player.roundY);
-                System.out.println("Current chunk: " + currentChunk.chunkX + ", " + currentChunk.chunkY);
-                LandscapeTile landscapeTile = currentChunk.getLandscapeAt(player.roundX, player.roundY);
+                System.out.println("Current chunk: " + currentChunk);
+
                 int playerTileX = player.roundX / Tile.TILE_SIZE;
                 int playerTileY = player.roundY / Tile.TILE_SIZE;
                 System.out.println("Player tile: " + playerTileX + ", " + playerTileY);
-                System.out.println("Landscape tile: " + landscapeTile.biome + ", speed modifier: " + landscapeTile.getSpeedModifier());
+
+                LandscapeTile landscapeTile = currentChunk.getLandscapeAt(player.roundX, player.roundY);
+                System.out.println("Landscape tile: " + landscapeTile);
+
                 TerrainFeatureTile terrainFeatureTile = currentChunk.getTerrainFeatureAt(player.roundX, player.roundY);
-                if (terrainFeatureTile == null) {
-                    System.out.println("Terrain feature tile: none");
-                } else {
-                    System.out.println("Terrain feature tile: speed modifier: " + terrainFeatureTile.getSpeedModifier());
-                }
+                System.out.println("Terrain feature tile: " + terrainFeatureTile);
             }
         });
     }
@@ -118,7 +119,6 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         sceneRenderer.dispose();
         uiRenderer.dispose();
-        player.dispose();
         hotBar.dispose();
     }
 }
