@@ -3,6 +3,9 @@ package com.pgg.player;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.pgg.Debug;
+import com.pgg.input.Controls;
+import com.pgg.input.Keyboard;
 
 public class Player {
     private static final int MAX_SPEED = 10;
@@ -35,35 +38,42 @@ public class Player {
         playerSprite.draw(batch);
     }
 
-    public void accelerateLeft() {
+    private void accelerateLeft() {
         dampenX = false;
         if (speedX > -MAX_SPEED) {
             speedX -= SPEED_INCREMENT;
         }
     }
 
-    public void accelerateRight() {
+    private void accelerateRight() {
         dampenX = false;
         if (speedX < MAX_SPEED) {
             speedX += SPEED_INCREMENT;
         }
     }
 
-    public void accelerateUp() {
+    private void accelerateUp() {
         dampenY = false;
         if (speedY < MAX_SPEED) {
             speedY += SPEED_INCREMENT;
         }
     }
 
-    public void accelerateDown() {
+    private void accelerateDown() {
         dampenY = false;
         if (speedY > -MAX_SPEED) {
             speedY -= SPEED_INCREMENT;
         }
     }
 
-    public boolean movePlayer(float speedModifier) {
+    public void registerInputActions(Keyboard keyboard) {
+        keyboard.registerKeyPressAction(Controls.PLAYER_MOVE_UP, this::accelerateUp);
+        keyboard.registerKeyPressAction(Controls.PLAYER_MOVE_DOWN, this::accelerateDown);
+        keyboard.registerKeyPressAction(Controls.PLAYER_MOVE_LEFT, this::accelerateLeft);
+        keyboard.registerKeyPressAction(Controls.PLAYER_MOVE_RIGHT, this::accelerateRight);
+    }
+
+    public void movePlayer(float speedModifier) {
         x += speedX * speedModifier; //TODO shall the Gdx.graphics.getDeltaTime() should be factored in?
         roundX = (int) x;
         y += speedY * speedModifier; //TODO shall the Gdx.graphics.getDeltaTime() should be factored in?
@@ -83,7 +93,6 @@ public class Player {
         }
         dampenX = true;
         dampenY = true;
-        return moved;
     }
 
     public void dispose() {

@@ -9,13 +9,13 @@ import com.pgg.player.Player;
 
 import java.util.Collection;
 
-public class GameRenderer {
+public class SceneRenderer {
     private final OrthographicCamera camera;
     private final Player player;
     private final Batch batch = new SpriteBatch();
     private final Rectangle viewBounds = new Rectangle();
 
-    public GameRenderer(OrthographicCamera camera, Player player) {
+    public SceneRenderer(OrthographicCamera camera, Player player) {
         this.camera = camera;
         this.player = player;
     }

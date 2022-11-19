@@ -2,8 +2,8 @@ package com.pgg.map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
+import com.pgg.Debug;
 import com.pgg.generation.TileGenerator;
 import com.pgg.map.tile.LandscapeTile;
 import com.pgg.map.tile.TerrainFeatureTile;
@@ -34,7 +34,7 @@ public class MapChunk {
     private void generate(TileGenerator generator) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int y = 0; y < CHUNK_SIZE; y++) {
-                TileGenerator.GenerationResult result = generator.generateRegion(x + chunkX * CHUNK_SIZE, y + chunkY * CHUNK_SIZE);
+                TileGenerator.Region result = generator.loadRegion(x + chunkX * CHUNK_SIZE, y + chunkY * CHUNK_SIZE);
                 landscape[y][x] = result.landscapeTile;
                 terrainFeatures[y][x] = result.terrainFeatureTile;
             }
@@ -61,7 +61,10 @@ public class MapChunk {
                 }
             }
         }
-        drawDebug(batch);
+
+        if (Debug.DEBUG_ENABLED) {
+            drawDebug(batch);
+        }
     }
 
     public LandscapeTile getLandscapeAt(int x, int y) {
@@ -77,12 +80,9 @@ public class MapChunk {
 
     }
 
-    // FIXME debug
-    private final BitmapFont font = new BitmapFont();
-
     private void drawDebug(Batch batch) {
-        font.setColor(Color.RED);
-        font.draw(batch, "[" + chunkX + ", " + chunkY + "]", xOffset + 10, yOffset + 20);
+        Debug.DEBUG_FONT.setColor(Color.RED);
+        Debug.DEBUG_FONT.draw(batch, "[" + chunkX + ", " + chunkY + "]", xOffset + 10, yOffset + 20);
     }
 
 }
